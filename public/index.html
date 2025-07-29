@@ -7,24 +7,60 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons">
   <link rel="stylesheet" href="styles/bootstrap-material-design.min.css">
   <link rel="stylesheet" href="styles/main.css">
-  <title>App Name</title>
+  <title>Movie Quotes</title>
 </head>
 
 <body>
   <nav class="navbar navbar-dark fixed-top">
-    <a class="navbar-brand" href="#">App Name</a>
+    <a class="navbar-brand" href="#">Movie Quotes</a>
   </nav>
-  <div id="mainPage" class="container page-container">
+  <div id="listPage" class="container page-container">
+
+
 
 
   </div>
+  
+  <button id="fab" type="button" class="btn bmd-btn-fab" data-toggle="modal" data-target="#addQuoteDialogue">
+    <i class="material-icons">add</i>
+  </button>
+
+<!-- Modal -->
+<div class="modal fade" id="addQuoteDialogue" tabindex="-1" >
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Add Movie Quote</h5>
+      </div>
+      <div class="modal-body">
+        <!-- Quote input -->
+        <div data-mdb-input-init class="form-outline mb-4 ">
+          <input type="text" id="inputQuote" class="form-control" />
+          <label class="form-label" for="inputMovie">Quote</label>
+        </div>
+
+        <!-- Movie input -->
+        <div data-mdb-input-init class="form-outline mb-4">
+          <input type="text" id="inputMovie" class="form-control" />
+          <label class="form-label" for="inputMovie">Movie</label>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">CANCEL</button>
+        <button type="button" class="btn btn-primary" id="submitAddQuote">CREATE</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
   <script src="scripts/jquery.min.js"></script>
   <script src="scripts/popper.js"></script>
   <script src="scripts/bootstrap-material-design.js"></script>
   <script>$("body").bootstrapMaterialDesign();</script>
   <script src="/__/firebase/7.18.0/firebase-app.js"></script>
   <script src="/__/firebase/7.18.0/firebase-analytics.js"></script>
-  <script src="/__/firebase/7.18.0/firebase-auth.js"></script>
+  <!-- <script src="/__/firebase/7.18.0/firebase-auth.js"></script> -->
   <script src="/__/firebase/7.18.0/firebase-firestore.js"></script>
   <script src="/__/firebase/init.js"></script>
   <script src="scripts/main.js"></script>
