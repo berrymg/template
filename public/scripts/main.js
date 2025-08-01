@@ -97,7 +97,7 @@ rhit.ListPageController = class {
 		});
 	}
 	stopListening() {
-		
+		this._unsubscribe();
 	}
 	update(id, quote, movie) {}
 	delete(id) {}
