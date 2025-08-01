@@ -16,6 +16,14 @@ rhit.FB_KEY_MOVIE = "Movie";
 rhit.FB_KEY_LAST_TOUCHED = "lastTouched";
 rhit.fbMovieQuotesManager = null;
 
+// I stole this from: the video.. looks like the stackoverflow thing was edited..
+function htmlToElement(html) {
+	var template = document.createElement('template');
+	html = html.trim();
+	template.innerHTML = html;
+	return template.content.firstChild;
+  }
+  
 rhit.ListPageController = class {
 	constructor() {
 
@@ -43,9 +51,20 @@ rhit.ListPageController = class {
 	updateList() {
 
 		console.log("I need to update the list on the page!");
-		console.log(`nN0.
-			um quotes = ${rhit.fbMovieQuotesManager.length}`);
+		console.log(`Num quotes = ${rhit.fbMovieQuotesManager.length}`);
 		console.log(`Example quote = `, rhit.fbMovieQuotesManager.getMovieQuoteAtIndex(0));
+
+		// Make a new quoteListContainer
+		const newList = htmlToElement('<div id="quoteListContainer"></div>');
+		// Fill the quoteListContainer with quote cards
+
+
+		//remove the old quoteListContainer
+		const oldList = document.querySelector("#quoteListContainer");
+		oldList.removeAttribute("id");
+		oldList.hidden = true;
+		//put in the new quoteListContainer
+		oldList.parentElement.appendChild(newList);
 	}
    }
    
