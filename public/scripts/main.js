@@ -116,7 +116,7 @@ rhit.ListPageController = class {
 	}
 
 	beginListening(changeListener) {
-		this._ref.onSnapshot((querySnapshot) => {
+		this._unsubscribe = this._ref.orderBy(rhit.FB_KEY_LAST_TOUCHED, "desc").limit(50).onSnapshot((querySnapshot) => {
 			console.log("MovieQuote Update!");
 			this._documentSnapshots = querySnapshot.docs;
 
