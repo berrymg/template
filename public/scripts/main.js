@@ -11,16 +11,42 @@ var rhit = rhit || {};
 
 /** globals */
 rhit.FB_COLLECTION_MOVIEQUOTES = "MovieQuotes";
-rhit.FB_KEY_QUOTE = "quote";
-rhit.FB_KEY_MOVIE = "movie";
+rhit.FB_KEY_QUOTE = "Quote";
+rhit.FB_KEY_MOVIE = "Movie";
 rhit.FB_KEY_LAST_TOUCHED = "lastTouched";
 rhit.fbMovieQuotesManager = null;
 
 rhit.ListPageController = class {
 	constructor() {
-		console.log("created ListPageController")
+
+		document.querySelector("#submitAddQuote").onclick = (event) => {
+			const quote = document.querySelector("#inputQuote").value;
+			const movie = document.querySelector("#inputMovie").value;
+			rhit.fbMovieQuotesManager.add(quote, movie);
+		};
+
+		//pre animation
+		$("#addQuoteDialogue").on("show.bs.modal", (event) => {
+			document.querySelector("#inputQuote").value = "";
+			document.querySelector("#inputMovie").value = "";
+		});
+
+		//post animation
+		$("#addQuoteDialogue").on("shown.bs.modal", (event) => {
+			document.querySelector("#inputQuote").focus();
+		});
+
+		//start listening
+		rhit.fbMovieQuotesManager.beginListening(this.updateList.bind(this));
+
 	}
-	updateList() {}
+	updateList() {
+
+		console.log("I need to update the list on the page!");
+		console.log(`nN0.
+			um quotes = ${rhit.fbMovieQuotesManager.length}`);
+		console.log(`Example quote = `, rhit.fbMovieQuotesManager.getMovieQuoteAtIndex(0));
+	}
    }
    
    rhit.MovieQuote = class {
@@ -37,13 +63,57 @@ rhit.ListPageController = class {
 	  this._documentSnapshots = [];
 	  this._ref = firebase.firestore().collection(rhit.FB_COLLECTION_MOVIEQUOTES);
 	}
-	add(quote, movie) {}
-	beginListening(changeListener) {}
-	stopListening() {}
+
+	add(quote, movie) {
+
+		console.log(quote, movie);
+
+	// Add a new document with a generated id.
+		this._ref.add({
+			[rhit.FB_KEY_QUOTE]: quote,
+			[rhit.FB_KEY_MOVIE]: movie,
+			[rhit.FB_KEY_LAST_TOUCHED]: firebase.firestore.Timestamp.now(),
+		})
+		.then(function (docRef) {
+			console.log("Document written with ID: ", docRef.id);
+		})
+		.catch(function (error) {
+			console.error("Error adding document: ", error);
+		});
+		
+	}
+
+	beginListening(changeListener) {
+		this._ref.onSnapshot((querySnapshot) => {
+			console.log("MovieQuote Update!");
+			this._documentSnapshots = querySnapshot.docs;
+
+
+			// querySnapshot.forEach((doc) => {
+			// 	console.log(doc.data());
+			// });
+			
+			changeListener();
+		});
+	}
+	stopListening() {
+		
+	}
 	update(id, quote, movie) {}
 	delete(id) {}
-	get length() {}
-	getMovieQuoteAtIndex(index) {}
+	get length() {
+		return this._documentSnapshots.length;
+	}
+	getMovieQuoteAtIndex(index) {
+		const docSnapshot = this._documentSnapshots[index];
+		const mq = new rhit.MovieQuote (
+			docSnapshot.id,
+			docSnapshot.get(rhit.FB_KEY_QUOTE),
+			docSnapshot.get(rhit.FB_KEY_MOVIE),
+		);
+
+		return mq;
+	}
    }
    
 
@@ -54,8 +124,8 @@ rhit.main = function () {
 
 	if(document.querySelector("#listPage")) {
 		console.log("You are on the list page.")
-		rhit.fvMovieQuoteManager = new rhit.FbMovieQuotesManager();
-		new rhit.ListPageController
+		rhit.fbMovieQuotesManager = new rhit.FbMovieQuotesManager();
+		new rhit.ListPageController();
 
 
 
@@ -64,7 +134,7 @@ rhit.main = function () {
 
 	if(document.querySelector("#detailPage")) {
 		console.log("You are on the detail page.")
-		new rhit.ListPageController
+		new rhit.ListPageController();
 	}
 
 
