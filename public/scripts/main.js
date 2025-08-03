@@ -180,9 +180,18 @@
 		$("#editQuoteDialogue").on("shown.bs.modal", (event) => {
 			document.querySelector("#inputQuote").focus();
 		});
-		rhit.fbSingleQuoteManager.beginListening(this.updateView.bind(this));
 
+		document.querySelector("#submitDeleteQuote").onclick = (event) => {
+			rhit.fbSingleQuoteManager.delete().then(() => {
+				console.log("Document successfully deleted!");
+				window.location.href = "/"
+			  }).catch((error) => {
+				console.error("Error removing document: ", error);
+			  });		  
+	;
+		};
 	
+		rhit.fbSingleQuoteManager.beginListening(this.updateView.bind(this));
 	}
  	updateView() {
 		document.querySelector("#cardQuote").innerHTML = rhit.fbSingleQuoteManager.quote;
@@ -227,7 +236,9 @@
 			console.error("Error updating document:", error);
 		  });
 	}
- 	delete() {}
+ 	delete() {
+		return this._ref.delete()
+	}
 
 	get quote() {
 		return this._documentSnapshot.get(rhit.FB_KEY_QUOTE);
